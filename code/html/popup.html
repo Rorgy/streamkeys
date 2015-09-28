@@ -5,7 +5,9 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
   </head>
 
-  <body>
+  <body data-bind="style: {
+    minHeight: (($data.musicTabs().length * 83) + 64) + 'px'
+  }">
     <div class="header">
       <a href="http://www.streamkeys.com" target="_blank" tabindex="-1">Streamkeys</a>
     </div>

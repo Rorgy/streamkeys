@@ -4,24 +4,21 @@ $main-color: #2880C7;
 $white: #ffffff;
 
 html {
-  padding: 0;
   margin: 0;
   min-height: 100px;
+  padding: 0;
 }
 
 body {
-  width: $popup-width;
-  padding: 0;
+  border: 1px solid #2880C7;
+  border-radius: 5px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding: 0;
+  width: $popup-width;
 }
 
 div a, div a:hover, div a:visited {
   text-decoration: none;
-}
-
-.player-div-border {
-  border-left: 1px solid $main-color;
-  border-right: 1px solid $main-color;
 }
 
 .disabled {
@@ -76,7 +73,6 @@ div a, div a:hover, div a:visited {
 }
 
 #player {
-  @extend .player-div-border;
   height: auto;
   min-height: 30px;
   padding-bottom: 10px;
@@ -109,11 +105,7 @@ div a, div a:hover, div a:visited {
 }
 
 .header {
-  @extend .player-div-border;
   background-color: $main-color;
-  border-top: 1px solid $main-color;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
   height: 40px;
   padding: 6px;
   text-align: center;
@@ -134,14 +126,12 @@ div a, div a:hover, div a:visited {
 }
 
 .options {
-  @extend .player-div-border;
   background-color: $main-color;
   display: block;
   height: 34px;
   padding: 6px 27px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom: 2px solid $main-color;
+  position: relative;
+  top: calc(100% - 34px);
   width: 100%;
 
   #help-link {
