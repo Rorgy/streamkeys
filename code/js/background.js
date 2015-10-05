@@ -21,9 +21,9 @@
    * @param {Object} request - Chrome request object from runtime.onMessage
    */
   var processCommand = function(request) {
-    if(request.tab_target && parseInt(request.tab_target)) {
-      chrome.tabs.sendMessage(parseInt(request.tab_target), { "action": request.command });
-      console.log("Single tab request. Sent: " + request.command + " To: " + request.tab_target);
+    if(request.tabTarget && parseInt(request.tabTarget)) {
+      chrome.tabs.sendMessage(parseInt(request.tabTarget), { "action": request.command });
+      console.log("Single tab request. Sent: " + request.command + " To: " + request.tabTarget);
     } else {
       sendAction(request.command);
     }
@@ -70,6 +70,13 @@
         fromTab: sender.tab
       });
     }
+    if(request.action === "update_all_player_states") {
+      chrome.runtime.sendMessage({
+        action: "update_popup_state",
+        stateData: request.stateData,
+        fromTab: sender.tab
+      });
+    }
     if(request.action === "get_music_tabs") {
       var music_tabs = window.sk_sites.getMusicTabs();
       music_tabs.then(function(tabs) {
@@ -78,6 +85,21 @@
       });
 
       return true;
+    }
+    if(request.action === "set_default_tab") {
+      console.log("setting default tab: ", request.tabId);
+      window.sk_sites.setDefaultTab(request.tabId);
+      chrome.runtime.sendMessage({
+        action: "default_tab_changed",
+        tabId: request.tabId
+      });
+    }
+    if(request.action === "unset_default_tab") {
+      window.sk_sites.unsetDefaultTab();
+      chrome.runtime.sendMessage({
+        action: "default_tab_changed",
+        tabId: null
+      });
     }
   });
 

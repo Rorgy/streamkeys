@@ -34,7 +34,9 @@
   var Sitelist = function() { return this; };
 
   Sitelist.prototype.init = function() {
-    this.sites = {
+    var self = this;
+
+    self.sites = {
       "7digital": {name: "7digital", url: "http://www.7digital.com"},
       "8tracks": {name: "8tracks", url: "http://www.8tracks.com"},
       "amazon": {name: "Amazon Cloud Player", url: "https://www.amazon.com/gp/dmusic/cloudplayer/player"},
@@ -117,7 +119,14 @@
       "youtube": {name: "YouTube", url: "http://www.youtube.com"},
       "zonga": {name: "Zonga", url: "http://asculta.zonga.ro", controller: "ZongaController.js"}
     };
-    this.disabledTabs = [];
+
+    self.disabledTabs = [];
+    self.defaultTab = null;
+
+    // When the default tab is closed we need to reset our default tabId
+    chrome.tabs.onRemoved.addListener(function(tabId) {
+      if(self.defaultTab && self.defaultTab == tabId) self.unsetDefaultTab();
+    });
   };
 
   /**
@@ -301,6 +310,13 @@
    * @return {Promise}
    */
   Sitelist.prototype.getActiveMusicTabs = function() {
+    console.log("default tab: ", this.defaultTab);
+    if(this.defaultTab) {
+      return new Promise(function(resolve) {
+        resolve([this.defaultTab]);
+      });
+    }
+
     var that = this;
     var promise = new Promise(function(resolve) {
       var music_tabs = [];
@@ -328,6 +344,7 @@
         tabs.forEach(function (tab) {
           if(that.checkEnabled(tab.url)) {
             tab.streamkeysEnabled = that.checkTabEnabled(tab.id);
+            tab.defaultTab = (that.defaultTab == tab.id);
             music_tabs.push(tab);
           }
         });
@@ -337,6 +354,20 @@
     });
 
     return promise;
+  };
+
+  /**
+   * Set default tab id
+   */
+  Sitelist.prototype.setDefaultTab = function(tabId) {
+    this.defaultTab = tabId;
+  };
+
+  /**
+   * Reset default tab id to null
+   */
+  Sitelist.prototype.unsetDefaultTab = function() {
+    this.defaultTab = null;
   };
 
   /**

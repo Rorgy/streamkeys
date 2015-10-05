@@ -21,12 +21,18 @@
       <div class="site-tab-container" data-bind="css: { disabled: !$data.streamkeysEnabled() }">
         <div class="player-row">
           <div class="site-data">
-            <a tabindex="-1" href="#" data-bind="click: function() { $data.openTab() }" title="Open Tab">
+            <a tabindex="-1" class="site-title-container" href="#" data-bind="click: function() { $data.openTab() }" title="Open Tab">
               <img class="site-favicon" data-bind="attr: { src: $data.faviconUrl }" />
               <span class="site-title" data-bind="text: $data.siteName"></span>
             </a>
-            <a href="#" data-bind="click: function() { $data.showTabSettings(!$data.showTabSettings.peek()) }" title="Settings">
-              <span class="glyphicon glyphicon-cog settings"></span>
+            <a tabindex="-1" href="#" class="settings" data-bind="click: function() { $data.showTabSettings(!$data.showTabSettings.peek()) }" title="Settings">
+              <span class="glyphicon glyphicon-cog"></span>
+            </a>
+            <a tabindex="-1" href="#" class="settings" data-bind="click: function() { $data.setDefaultTab(!$data.defaultTab.peek()) }" title="Make Default">
+              <span class="glyphicon" data-bind="css: {
+                'glyphicon-star-empty': !$data.defaultTab(),
+                'glyphicon-star': $data.defaultTab()
+              }"></span>
             </a>
           </div>
           <div class="song-data" data-bind="scrollingSong: songArtistText, visible: $data.songArtistText().length"></div>
